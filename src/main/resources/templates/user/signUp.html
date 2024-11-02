@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<th:block layout:fragment="content">
+	<section class="contents d-flex justify-content-center">
+		<div>
+			<h1 class="mt-5 ml-3">회원가입</h1>
+			<div class="sign-up-box">
+				<form id = "signUpForm" method="post" action="/user/sign-up">
+					<div>
+						<div class="input-module">
+							<label>아이디</label>
+							<div class="d-flex">
+								<input id="loginId" type="text" placeholder="아이디를 입력하세요" name="loginId" class="form-control col-7">
+								<button id="logindId-Check-Btn" type="button" class="btn btn-success ml-3">중복확인</button>
+							</div>
+							<div class="ml-2">
+								<span id="duplicate-id" class="text-danger d-none">이미 사용중인 아이디입니다.</span>
+								<span id="available-id" class="text-success d-none">사용 가능한 아이디입니다.</span>
+								<span id="unvalid-id" class="text-danger d-none">4자 이상 입력하세요.</span>
+							</div>
+						</div>
+						
+						<div class="input-module">
+							<label>비밀번호</label>
+							<input id="password" type="password" placeholder="비밀번호를 입력하세요" name="password" class="form-control col-7">
+						</div>
+						
+						<div class="input-module">
+							<label>비밀번호 확인</label>
+							<input id="passwordCheck" type="password" placeholder="비밀번호 확인을 입력하세요" name="passwordCheck" class="form-control col-7">
+						</div>
+						
+						<div class="input-module">
+							<label>이름</label>
+							<input id="name" type="text" placeholder="이름을 입력하세요" name="name" class="form-control col-7">
+						</div>
+						
+						<div class="input-module">
+							<label>이메일</label>
+							<input id="email" type="text" placeholder="이메일을 입력하세요" name="email" class="form-control col-7">
+						</div>
+						
+						<div class="d-flex justify-content-center">
+							<button type="submit" class="btn btn-info">회원가입</button>
+						</div>
+					</div>
+					
+					
+					
+				</form>
+			</div>
+		</div>
+	</section>
+</th:block>
+<th:block layout:fragment="script">
+    <script>
+		$(document).ready(function() {
+			var isLoginIdChecked = true;
+			
+			// 아이디 중복확인 클릭 이벤트 종료
+			$("#logindId-Check-Btn").on("click", function() {
+				let loginId = $("input[name=loginId]").val().trim();
+				if (loginId.length < 4) {
+					$("#unvalid-id").removeClass("d-none");
+					return;
+				}
+				
+				
+				
+				// ajax => 중복확인
+				$.ajax({
+					type:"get"
+					, url:"/user/is-duplicate-id"
+					, data:{"loginId":loginId}
+					, success:function(data) {
+						if (data.code == 200) {
+							// 사용가능 아이디 문구 보이게
+							if (!data.is_duplicate_id) {
+								$("#available-id").removeClass("d-none");
+								$("#duplicate-id").addClass("d-none");
+								$("#unvalid-id").addClass("d-none");
+								isLoginIdChecked = true;
+							} else {
+								// 중복 아이디 문구 보이게
+								$("#duplicate-id").removeClass("d-none");
+								$("#available-id").addClass("d-none");
+								$("#unvalid-id").addClass("d-none");
+							}
+							
+						}
+					}
+					, error:function(e) {
+						// TODO
+						alert("실패");
+					}
+				}); // 아이디 중복확인 ajax 통신 종료
+				
+				
+			}); // 중복확인 클릭 이벤트 종료
+			
+			// 아이디 수정하면 중복확인 초기화
+			$("input[name=loginId]").on("input", function() {
+				$("#duplicate-id").addClass("d-none");
+				$("#available-id").addClass("d-none");
+				$("#unvalid-id").addClass("d-none");
+				
+				isLoginIdChecked = false;
+			});
+			
+			$("#signUpForm").on("submit", function(e) {
+				e.preventDefault();
+				let loginId = $("#loginId").val().trim();
+				let password = $("#password").val().trim();
+				let passwordCheck = $("#passwordCheck").val().trim();
+				let name = $("#name").val().trim();
+				let email = $("#email").val().trim();
+				
+				// validation
+				if (!loginId) {
+					alert("아이디를 입력하세요.");
+					return false;
+				}
+				
+				if (!isLoginIdChecked) {
+					alert("아이디 중복확인을 하세요.");
+					return false;
+				}
+				
+				if (!password) {
+					alert("비밀번호를 입력하세요.");
+					return false;
+				}
+				
+				if (!passwordCheck) {
+					alert("비밀번호 확인을 입력하세요.");
+					return false;
+				}
+				
+				if (password != passwordCheck) {
+					alert("비밀번호 확인이 일치하지 않습니다.");
+					return false;
+				}
+				
+				if (!name) {
+					alert("이름을 입력하세요.");
+					return false;
+				}
+				
+				if (!email) {
+					alert("이메일을 입력하세요.");
+					return false;
+				}
+				
+				let url = $(this).attr("action");
+				let params = $(this).serialize(); // 예제에서는 $(this)[0].serialize()로 했음.
+				console.log(params);
+				$.post(url, params)
+				.done(function(data) {
+					if (data.result == "성공") {
+						// alert(data.result);
+						location.href = "/user/sign-in-view"
+					} else {
+						alert(data.error_message);
+					}
+					
+				})
+				.fail(function(e) {
+					alert("실패");
+				});
+				
+				return false;
+				
+			});
+			
+			
+			
+		});
+    </script>
+</th:block>

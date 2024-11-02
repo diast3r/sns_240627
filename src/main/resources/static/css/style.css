@@ -1,0 +1,29 @@
+@charset "UTF-8";
+header {
+	height:100px;
+}
+
+.sign-up-box {
+	width: 700px;
+	padding: 40px 0px 40px 70px;
+	border-radius: 10px;
+	background-color: #f3f3f3;
+	
+}
+
+#logo, #loginLink {
+	color:#000;
+	text-decoration:none;
+}
+
+.input-module {
+	margin-bottom: 15px;
+}
+
+.contents {
+	height: 1000px;
+}
+
+#loginBox {
+	height:300px;
+}

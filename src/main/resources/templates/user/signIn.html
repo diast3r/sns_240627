@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="container d-flex justify-content-center">
+		<div class="col-8 mt-5">
+			<h2>로그인</h2>
+			<div id="loginBox" class="bg-light d-flex justify-content-center align-items-center">
+				<form id="loginForm" class="w-50" method="post" action="/user/sign-in">
+					<input type="text" name="loginId" placeholder="아이디를 입력하세요." class="form-control">
+					<input type="password" name="password" placeholder="비밀번호를 입력하세요." class="form-control mt-3">
+					
+					<div class="d-flex mt-3">
+						<button type="submit" class="form-control btn btn-success">로그인</button>
+						<a href="/user/sign-up-view" class="form-control btn btn-primary ml-3">회원가입</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+		$(document).ready(function() {
+			$("#loginForm").on("submit", function(e) {
+				e.preventDefault;
+				let loginId = $("input[name=loginId]").val().trim();
+				let password = $("input[name=password]").val().trim();
+				
+				// validation
+				if (!loginId) {
+					alert("아이디를 입력하세요.");
+					return false;
+				}
+				
+				if (!password) {
+					alert("비밀번호를 입력하세요.");
+					return false;
+				}
+				
+				// ajax
+				let url = $(this).attr("action");
+				let data = $(this).serialize();
+				
+				$.post(url, data)
+				.done(function(data) {
+					if (data.result == "성공") {
+						location.href = "/timeline";
+					}
+				})
+				.fail(function(e) {
+					alert("실패");
+				});
+				
+				return false;
+				
+				
+				
+			}); // login submit 종료
+			
+			
+		}); // document ready 종료
+    </script>
+</th:block>
