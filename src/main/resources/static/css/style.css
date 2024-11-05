@@ -8,10 +8,9 @@ header {
 	padding: 40px 0px 40px 70px;
 	border-radius: 10px;
 	background-color: #f3f3f3;
-	
 }
 
-#logo, #loginLink {
+#logo, #loginLink, #logoutLink {
 	color:#000;
 	text-decoration:none;
 }
@@ -26,4 +25,59 @@ header {
 
 #loginBox {
 	height:300px;
+}
+
+.timeline {
+	width:500px;
+	min-height:700px;
+	outline: 2px solid #f0f0f0;
+	border-radius:5px;
+}
+
+#uploadForm {
+	border:2px solid #000;
+	border-radius: 15px;
+	padding: 9px;
+}
+
+#uploadForm-text {
+	border:none;
+	height:auto;
+	resize:none;
+	width:100%;
+}
+
+#uploadForm-text:focus {
+	outline:none;
+}
+
+#uploadForm .imgUploadBtn {
+	width:25px;
+	height:25px;
+}
+
+.pointer {
+	cursor:pointer;
+}
+
+.timeline-img {
+	width:inherit;
+}
+
+.nickname {
+	font-weight:bold;
+	word-break:break-all;word-wrap:break-word;
+	width:100px;
+}
+
+.inline {
+	white-space:nowrap;
+}
+
+<!-- -->
+
+.text-wrap {
+	width:75%;
+	word-break:break-all;
+	word-wrap:break-word;
 }

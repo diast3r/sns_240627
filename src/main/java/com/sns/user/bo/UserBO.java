@@ -24,6 +24,10 @@ public class UserBO {
 		return userRepository.findByLoginId(loginId).orElse(null);
 	}
 	
+	public UserEntity getUserEntityByLoginIdPassword (String loginId, String password) {
+		return userRepository.findByLoginIdAndPassword(loginId, password).orElse(null);
+	}
+	
 	/**
 	 * <b>회원가입 (JPA)</b><br><br>
 	 * 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="timeline-box">
+		<!-- 글쓰기 -->
+		<div class=" p-2">
+			<!-- 내용 입력란 -->
+			<form id="uploadForm" method="post" action="/timeline/create-post">
+				<textarea id="uploadForm-text" type="text" placeholder="내용을 입력해주세요." spellcheck="false"></textarea>
+				
+				<div class="d-flex justify-content-between align-items-center">
+				
+					<img src="/img/heart-icon.png" title="사진 업로드" alt="사진 업로드" class="imgUploadBtn pointer">
+					<button type="submit" class="btn btn-info">게시</button>
+				</div>
+			</form>
+		</div>
+		
+		<!-- 타임라인 -->
+		<article class="timeline">
+			<!-- 헤더(글쓴이) -->
+			<div class="timeline-title bg-light d-flex justify-content-between align-items-center px-3">
+				<span>글쓴이??</span>
+				<img src="/img/more-icon.png" title="더보기" class="pointer" alt="더보기" width="50px">
+			</div>
+			
+			<!-- 사진 -->
+			<img src="https://cdn.pixabay.com/photo/2024/10/20/14/09/pumpkins-9135128_1280.jpg" class="timeline-img" alt="타임라인 사진">
+			
+			<!-- 좋아요, 타임라인 글내용, 댓글 -->
+			<div class="p-3">
+				<!-- 좋아요 -->
+				<div class="d-flex align-items-center">
+					<img title="좋아요" class="pointer" src="/img/heart-icon.png" width="25px">
+					<span class="ml-2">좋아요 ?개</span>
+				</div>
+				<!-- 타임라인 텍스트 -->
+				<div class="d-flex mt-1 justify-content-between">
+					<!-- 글쓴이 이름 -->
+					<div class="nickname">글쓴이??</div>
+					
+					<!-- 텍스트 -->
+					<div class="text-wrap ml-2">비지도 학습을 해본 결과예요. 클러스터 알고리즘을 사용해봤어요!!! 의미있게 군집화 된 데이터를 보니까 너무 행복해요^^</div>
+				</div>
+				
+				<!-- 댓글 -->
+				<div>
+					<div class="bg-light mt-2 p-1">댓글</div>
+					
+					<div class="d-flex justify-content-between">
+						<div class="nickname mt-2">ㄴㅁasefㄴㅁㄴ;ㅇ라ㅣ</div>
+						<div class="text-wrap mt-2">sefa;ㅇㄻ나ㅓㅣ;ㅇㄻ너ㅏㅣ;ㄴㅇㅁㄹ</div>
+					</div>
+					
+					<div class="d-flex justify-content-between">
+						<div class="nickname mt-2">ㄴㅁasefㄴㅁㄴ;ㅇ라ㅣ</div>
+						<div class="text-wrap mt-2">sefa;ㅇㄻ나ㅓㅣ;ㅇㄻ너ㅏㅣ;ㄴㅇㅁㄹ</div>
+					</div>
+				</div>
+				
+				
+				<!-- 댓글 입력란 -->
+				<div class="d-flex mt-2">
+					<input class="form-control">
+					<button type="submit" class="btn btn-light ml-3 inline">게시</button>
+				</div>
+			
+			</div>
+		</article>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+		$(document).ready(function() {
+			
+			// textarea 크기 자동 조절
+			$("#uploadForm-text").on("input", function() {
+				$(this).css("height", "auto");
+				$(this).height(this.scrollHeight);
+			}); 
+			
+			
+			$("#uploadImage").on("click", function(e) {
+				e.preventDefault();
+				
+				
+				return;
+			});
+			
+			// 사진 업로드
+			
+			
+			
+			// 좋아요
+			
+		}); // document ready 종료
+    </script>
+</th:block>
