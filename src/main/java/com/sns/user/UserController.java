@@ -30,13 +30,18 @@ public class UserController {
 		return "user/signIn";
 	}
 	
+	/**
+	 * 로그아웃 후 타임라인으로 이동<br>
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/sign-out")
 	public String signOut(HttpSession session) {
 		session.removeAttribute("userId");
 		session.removeAttribute("userLoginId");
 		session.removeAttribute("userName");
 		
-		return "redirect:/user/sign-in-view";
+		return "redirect:/timeline";
 	}
 	
 }

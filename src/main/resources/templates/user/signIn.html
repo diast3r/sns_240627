@@ -48,8 +48,10 @@
 				
 				$.post(url, data)
 				.done(function(data) {
-					if (data.result == "성공") {
+					if (data.code == 200) {
 						location.href = "/timeline";
+					} else if (data.code == 300) {
+						alert("아이디 또는 비밀번호가 틀렸습니다.");
 					}
 				})
 				.fail(function(e) {

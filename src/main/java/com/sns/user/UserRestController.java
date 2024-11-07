@@ -97,7 +97,7 @@ public class UserRestController {
 			@RequestParam("password") String password,
 			HttpServletRequest request) {
 		
-		// hasing
+		// hashing
 		String hashedPassword = EncryptUtils.md5(password);
 		
 		UserEntity user = userBO.getUserEntityByLoginIdPassword(loginId, hashedPassword);

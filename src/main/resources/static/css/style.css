@@ -66,7 +66,6 @@ header {
 
 .nickname {
 	font-weight:bold;
-	word-break:break-all;word-wrap:break-word;
 	width:100px;
 }
 
@@ -77,7 +76,6 @@ header {
 <!-- -->
 
 .text-wrap {
-	width:75%;
 	word-break:break-all;
 	word-wrap:break-word;
 }

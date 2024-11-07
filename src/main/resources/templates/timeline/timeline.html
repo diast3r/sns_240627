@@ -6,30 +6,32 @@
 <section layout:fragment="content" class="contents d-flex justify-content-center">
 	<div class="timeline-box">
 		<!-- 글쓰기 -->
-		<div class=" p-2">
+		<div th:if="${session.userId != null}" class="p-2">
 			<!-- 내용 입력란 -->
-			<form id="uploadForm" method="post" action="/timeline/create-post">
-				<textarea id="uploadForm-text" type="text" placeholder="내용을 입력해주세요." spellcheck="false"></textarea>
+			<form id="uploadForm" method="post" action="/post/create">
+				<textarea id="uploadForm-text" name="content" placeholder="내용을 입력해주세요." spellcheck="false"></textarea>
 				
 				<div class="d-flex justify-content-between align-items-center">
-				
-					<img src="/img/heart-icon.png" title="사진 업로드" alt="사진 업로드" class="imgUploadBtn pointer">
+					<!-- file 태그를 숨겨두고 이미지를 클릭하면 파일을 클릭한 것과 같은 효과를 준다. -->
+					<input name="file" type="file" id="file" accept=".jpg, .png, .gif" class="d-none">
+					
+					<img id="fileUploadBtn" src="/img/heart-icon.png" title="사진 업로드" alt="사진 업로드" class="imgUploadBtn pointer">
+					<div id="fileName" class="ml-2"></div>
 					<button type="submit" class="btn btn-info">게시</button>
 				</div>
 			</form>
 		</div>
 		
 		<!-- 타임라인 -->
-		<article class="timeline">
+		<article th:each="post : ${postList}" class="timeline mt-3">
 			<!-- 헤더(글쓴이) -->
 			<div class="timeline-title bg-light d-flex justify-content-between align-items-center px-3">
-				<span>글쓴이??</span>
+				<span th:text="${post.getUser().getName()}">글쓴이??</span>
 				<img src="/img/more-icon.png" title="더보기" class="pointer" alt="더보기" width="50px">
 			</div>
 			
 			<!-- 사진 -->
-			<img src="https://cdn.pixabay.com/photo/2024/10/20/14/09/pumpkins-9135128_1280.jpg" class="timeline-img" alt="타임라인 사진">
-			
+			<img th:src="${post.getImgPath()}" class="timeline-img" alt="타임라인 사진">
 			<!-- 좋아요, 타임라인 글내용, 댓글 -->
 			<div class="p-3">
 				<!-- 좋아요 -->
@@ -40,27 +42,27 @@
 				<!-- 타임라인 텍스트 -->
 				<div class="d-flex mt-1 justify-content-between">
 					<!-- 글쓴이 이름 -->
-					<div class="nickname">글쓴이??</div>
+					<div class="nickname" th:text="${post.getUser().getName()}">글쓴이</div>
 					
 					<!-- 텍스트 -->
-					<div class="text-wrap ml-2">비지도 학습을 해본 결과예요. 클러스터 알고리즘을 사용해봤어요!!! 의미있게 군집화 된 데이터를 보니까 너무 행복해요^^</div>
+					<div th:text="${post.content}" class="text-wrap ml-2 w-75"></div>
 				</div>
 				
 				<!-- 댓글 -->
 				<div>
 					<div class="bg-light mt-2 p-1">댓글</div>
 					
-					<div class="d-flex justify-content-between">
-						<div class="nickname mt-2">ㄴㅁasefㄴㅁㄴ;ㅇ라ㅣ</div>
-						<div class="text-wrap mt-2">sefa;ㅇㄻ나ㅓㅣ;ㅇㄻ너ㅏㅣ;ㄴㅇㅁㄹ</div>
-					</div>
-					
-					<div class="d-flex justify-content-between">
-						<div class="nickname mt-2">ㄴㅁasefㄴㅁㄴ;ㅇ라ㅣ</div>
-						<div class="text-wrap mt-2">sefa;ㅇㄻ나ㅓㅣ;ㅇㄻ너ㅏㅣ;ㄴㅇㅁㄹ</div>
-					</div>
+					<th:block th:each="comment : ${post.getComments()}">
+						<div class="d-flex justify-content-between mt-2">
+								<div class="nickname text-wrap" th:text="${comment.getUser().getName()}">닉네임</div>
+								<div class="d-flex justify-content-between align-items-center w-75">
+									<div class="text-wrap" th:text="${comment.content}">댓글 내용</div>
+									<img th:if="${session.userLoginId == comment.getUser().getLoginId()}" class="pointer" title="댓글 삭제" alt="댓글 삭제" th:src="@{/img/x-icon.png}" width="10px">
+								</div>
+							
+						</div>
+					</th:block>
 				</div>
-				
 				
 				<!-- 댓글 입력란 -->
 				<div class="d-flex mt-2">
@@ -91,7 +93,78 @@
 				return;
 			});
 			
-			// 사진 업로드
+			// 사진 업로드 (이미지 클릭 시) => 숨겨져 있는 id="file" 동작
+			$("#fileUploadBtn").on("click", function() {
+				//alert("이미지");
+				$("#file").click();
+			});
+			
+			// 파일이 선택될 때 1) 유효성 체크 2) 파일명 노출
+			$("#file").on("change", function(e) {
+				if (e.target.files[0] == null) {
+					$("#file").val(""); // 보이진 않지만 파일 태그에 올라온 것 제거
+					$("#fileName").val(""); // 파일명 보여주는 것도 초기화
+					return;
+				}
+				//alert("파일 선택");
+				let fileName = e.target.files[0].name;
+				//console.log(fileName);
+				
+				// 1) 유효성 체크
+				let ext = fileName.split(".").pop().toLowerCase();
+				//console.log(ext);
+				
+				if (ext != "gif" && ext != "png" && ext != "jpg") {
+					alert("이미지 파일만 업로드 할 수 있습니다.");
+					$("#file").val(""); // 보이진 않지만 파일 태그에 올라온 것 제거
+					$("#fileName").val(""); // 파일명 보여주는 것도 초기화
+					return;
+				}
+				
+				// 2) 파일명을 노출
+				$("#fileName").text(fileName);
+				
+			});
+			
+			// 글 게시
+			$("#uploadForm").on("submit", function(e) {
+				e.preventDefault();
+				//alert("");
+				let file = $("#file").val();
+				//console.log(file);
+				
+				
+				if (!file) {
+					alert("이미지를 선택해주세요");
+					return;
+				}
+				
+				let formData = new FormData();
+				formData.append("content", $("#uploadForm-text").val())
+				formData.append("file", $("#file")[0].files[0]);
+				
+				$.ajax({
+					type:"post"
+					, url:"/post/create"
+					, data:formData
+					, processData:false
+					, contentType:false
+					, enctype:"multipart/form-data"
+					, success:function(data) {
+						if (data.code == 200) {
+							alert("성공?");
+							location.reload();
+						} else if (data.code == 403) {
+							alert("로그인 후 이용해주세요.");
+						}
+					}
+					, error:function(e) {
+						alert("실패");
+					}
+				});
+			}); // 게시 이벤트 종료
+			
+			
 			
 			
 			
