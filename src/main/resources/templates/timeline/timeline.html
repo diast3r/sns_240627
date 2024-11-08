@@ -23,7 +23,7 @@
 		</div>
 		
 		<!-- 타임라인 -->
-		<article th:each="post : ${postList}" class="timeline mt-3">
+		<article th:each="post : ${postList}">
 			<!-- 헤더(글쓴이) -->
 			<div class="timeline-title bg-light d-flex justify-content-between align-items-center px-3">
 				<span th:text="${post.getUser().getName()}">글쓴이??</span>
@@ -49,7 +49,7 @@
 				</div>
 				
 				<!-- 댓글 -->
-				<div>
+				<div class="comments">
 					<div class="bg-light mt-2 p-1">댓글</div>
 					
 					<th:block th:each="comment : ${post.getComments()}">
@@ -67,7 +67,7 @@
 				<!-- 댓글 입력란 -->
 				<div class="d-flex mt-2">
 					<input class="form-control">
-					<button type="submit" class="btn btn-light ml-3 inline">게시</button>
+					<button type="submit" class="btn btn-light ml-3 inline comment-upload-btn"  th:data-post-id="${post.id}">게시</button>
 				</div>
 			
 			</div>
@@ -152,18 +152,50 @@
 					, enctype:"multipart/form-data"
 					, success:function(data) {
 						if (data.code == 200) {
-							alert("성공?");
 							location.reload();
 						} else if (data.code == 403) {
 							alert("로그인 후 이용해주세요.");
+						} else if (data.code == 500) {
+							alert(data.error_message);
+						}
+					}
+					, error:function(e) {
+						alert("글 작성 실패");
+					}
+				});
+			}); // 게시 이벤트 종료
+			
+			$(".comment-upload-btn").on("click", function() {
+				//alert("클릭");
+				let comment = $(this).siblings("input").val().trim(); // 형제 태그를 가져오기 siblings() 는 형제 모두를 가져온다. () 안에 셀렉터 문법으로 지정하면 됨.
+				//let comment = $(this).prev().val().trim(); // 바로 이전 태그를 가져오기
+				let postId = $(this).data("post-id");
+				
+ 				if (!comment) {
+					return;
+				}
+				
+				
+				$.ajax({
+					type:"post"
+					, url:"/comment/create"
+					, data:{"comment":comment, "postId":postId}
+					, success:function(data) {
+						if (data.code == 200) {
+							location.reload();
+						} else if (data.code == 403) {
+							alert(data.error_message);
+						} else if (data.code == 500) {
+							alert(data.error_message);
 						}
 					}
 					, error:function(e) {
 						alert("실패");
 					}
-				});
-			}); // 게시 이벤트 종료
-			
+				})
+				
+				
+			});
 			
 			
 			

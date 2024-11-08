@@ -12,60 +12,43 @@ import com.sns.post.repository.PostRepository;
 import com.sns.user.entity.UserEntity;
 import com.sns.user.repository.UserRepository;
 
-@Service
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
+@Service
 public class PostBO {
-	@Autowired
-	private PostRepository postRepository;
 	
-	@Autowired
-	private UserRepository userRepository;
+	private final PostRepository postRepository;
+	private final UserRepository userRepository;
+	private final FileManagerService fileManager;  
 	
-	@Autowired
-	private FileManagerService fileManager;  
 	
-	public List<PostEntity> getPostListWithUserLoginId() {
+	public List<PostEntity> getPostListOrderById() {
 		return postRepository.findByOrderByIdDesc();
 	}
 	
 	
-	/*
-	public List<PostDto> getPostListWithUserLoginId() {
-		//return postRepository.findByOrderByIdDesc(); // ORDER BY id로 조건을 걸어야 인덱스를 탐.
-		List<PostDto> postDtoList = new ArrayList<>();
-		List<PostEntity> postEntityList = postRepository.findByOrderByIdDesc();
-		PostDto postDto;
-		for (PostEntity postEntity : postEntityList) {
-			postDto = new PostDto();
-			postDto.setId(postEntity.getId());
-			postDto.setUserId(postEntity.getUser().getId());
-			postDto.setContent(postEntity.getContent());
-			postDto.setImgPath(postEntity.getImgPath());
-			postDto.setCreatedAt(postEntity.getCreatedAt());
-			postDto.setUpdatedAt(postEntity.getUpdatedAt());
-			postDto.setUserLoginId(postEntity.getUser().getLoginId());
-			postDtoList.add(postDto);
-		}
-		return postDtoList;
-	} 
-	*/
-	
-	public int addPost(int userId, String loginId, String content, MultipartFile file) {
+	/**
+	 * 글 작성(JPA)<br>
+	 * 
+	 * @param userId 글 작성자 id
+	 * @param loginId 글 작성자 loginId - db에 저장할 파일 경로 생성에 사용함
+	 * @param content 글 내용
+	 * @param file 글 본문 이미지 파일
+	 * @return
+	 */
+	public PostEntity addPost(int userId, String loginId, String content, MultipartFile file) {
 		String filePath = fileManager.uploadFile(file, loginId);
 		
 		UserEntity user = userRepository.findById(userId).orElseThrow();
 		
-		postRepository.save(PostEntity
+		return postRepository.save(PostEntity
 				.builder()
 				.user(user)
 				.content(content)
 				.imgPath(filePath)
 				.build());
 		
-		
-		
-		
-		return 0;
 	}
 	
 }

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
 	/**
 	 * 회원가입 화면으로 이동<br>
 	 * 
@@ -18,7 +19,6 @@ public class UserController {
 	public String signUpView() {
 		return "user/signUp";
 	}
-	
 	
 	/**
 	 * 로그인 화면으로 이동<br>
@@ -40,7 +40,6 @@ public class UserController {
 		session.removeAttribute("userId");
 		session.removeAttribute("userLoginId");
 		session.removeAttribute("userName");
-		
 		return "redirect:/timeline";
 	}
 	

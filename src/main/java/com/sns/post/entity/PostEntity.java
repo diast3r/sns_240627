@@ -7,10 +7,12 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.sns.comment.entity.CommentEntity;
 import com.sns.user.entity.UserEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +26,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-//@ToString
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -59,7 +61,7 @@ public class PostEntity {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
 	private List<CommentEntity> comments = new ArrayList<>();
 
 

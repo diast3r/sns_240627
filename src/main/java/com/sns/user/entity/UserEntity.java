@@ -1,15 +1,21 @@
 package com.sns.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.sns.post.entity.PostEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,6 +63,6 @@ public class UserEntity {
 	 * List<주인 Entity>를, N쪽에는 @JoinColumn과 @ManyToOne를 붙인 mappedBy는 1쪽에서 하는 설정 (주인
 	 * 쪽은 다른 설정)
 	 */
-//	@OneToMany(mappedBy = "user")
-//	private List<PostEntity> posts = new ArrayList<>(); // 초기화하지 않으면 NullPointException 발생함.
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<PostEntity> posts = new ArrayList<>(); // 초기화하지 않으면 NullPointException 발생함.
 }

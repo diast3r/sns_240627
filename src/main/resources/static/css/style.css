@@ -27,11 +27,12 @@ header {
 	height:300px;
 }
 
-.timeline {
+.timeline-box article {
 	width:500px;
-	min-height:700px;
+	/* min-height:700px; */
 	outline: 2px solid #f0f0f0;
 	border-radius:5px;
+	margin-top:16px;
 }
 
 #uploadForm {

@@ -11,15 +11,27 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sns.post.bo.PostBO;
+import com.sns.post.entity.PostEntity;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/post")
 public class PostRestController {
-	@Autowired
-	private PostBO postBO;
 	
+	private final PostBO postBO;
+	
+	
+	/**
+	 * 글 작성 (JPA)<br>
+	 * 
+	 * @param content 글 내용
+	 * @param file 본문 이미지 파일
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/create")
 	public Map<String, Object> createPost(
 			@RequestParam(value = "content", required = false) String content,
@@ -35,14 +47,19 @@ public class PostRestController {
 		}
 		String loginId = (String)session.getAttribute("userLoginId");
 		
-		postBO.addPost(userId, loginId, content, file);
+		PostEntity post = postBO.addPost(userId, loginId, content, file);
+		if (post != null) {
+			result.put("code", 200);
+			result.put("result", "성공");
+			return result;
+		} else {
+			result.put("code", 500);
+			result.put("error_message", "글 작성에 실패했습니다. 관리자에게 문의해주세요");
+			return result;
+		}
 		
 		
 		
-		result.put("code", 200);
-		result.put("result", "성공");
-		
-		return result;
 	}
 	
 }

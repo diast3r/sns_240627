@@ -1,11 +1,13 @@
-package com.sns.post.entity;
+package com.sns.comment.entity;
 
 import java.time.LocalDateTime;
 
+import com.sns.post.entity.PostEntity;
 import com.sns.user.entity.UserEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-//@ToString
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,11 +32,11 @@ public class CommentEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "postId", referencedColumnName = "id")
 	private PostEntity post;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", referencedColumnName = "id")
 	private UserEntity user;
 	

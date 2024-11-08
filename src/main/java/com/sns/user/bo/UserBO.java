@@ -1,18 +1,19 @@
 package com.sns.user.bo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import com.sns.user.entity.UserEntity;
 import com.sns.user.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service // JPA
 public class UserBO {
-	@Autowired
-	private UserRepository userRepository;
 	
+	private final UserRepository userRepository;
 	
 	/**
 	 * <b>아이디로 사용자 조회 (JPA)</b><br><br>
@@ -24,6 +25,14 @@ public class UserBO {
 		return userRepository.findByLoginId(loginId).orElse(null);
 	}
 	
+	
+	/**
+	 * 로그인 시 아이디, 비밀번호로 user 데이터 가져오기(JPA)<br>
+	 * 
+	 * @param loginId
+	 * @param password
+	 * @return
+	 */
 	public UserEntity getUserEntityByLoginIdPassword (String loginId, String password) {
 		return userRepository.findByLoginIdAndPassword(loginId, password).orElse(null);
 	}

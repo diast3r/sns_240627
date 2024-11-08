@@ -10,17 +10,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.sns.post.bo.PostBO;
 import com.sns.post.entity.PostEntity;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Controller
 public class TimelineController {
-	@Autowired
-	private PostBO postBO;
+	
+	private final PostBO postBO;
 	
 	@GetMapping("/timeline")
 	public String timeline(Model model) {
-		List<PostEntity> postList = postBO.getPostListWithUserLoginId();
+		List<PostEntity> postList = postBO.getPostListOrderById();
 		//List<PostDto> postList = postBO.getPostListWithUserLoginId();
 		
 		model.addAttribute("postList", postList);
 		return "timeline/timeline";
+	}
+	
+	@GetMapping("/timeline/test")
+	public String timelineTest(Model model) {
+		
+		List<PostEntity> postList = postBO.getPostListOrderById();
+		
+		model.addAttribute("postList", postList);
+		return "timeline/timelineTest";
 	}
 }
