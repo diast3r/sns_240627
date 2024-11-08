@@ -39,14 +39,14 @@ public class PostEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	
-	
 	// @ManyToOne: 이 테이블이 N이고, 참조할 테이블이 1의 관계임. (이 테이블이 연관관계의 주인이다)
 	// @JoinColumn: 의미로 보면 join + @Column이라고 보면 됨. @Column(name = "userId")인데, join을 위한 외래키인 것일 뿐. 따라서 name은 N이 가진 컬럼명으로 설정
 	// referencedColumnName : 참조하는 테이블의 어떤 컬럼을 참조할 것인지. 생략 시(한 개의 컬럼만 참조할 때) PK 참조
-	@ManyToOne
-	@JoinColumn(name = "userId", referencedColumnName = "id") 
-	private UserEntity user;
+//	@ManyToOne
+//	@JoinColumn(name = "userId", referencedColumnName = "id") 
+//	private UserEntity user;
+	
+	private int userId;
 	
 	private String content;
 	
@@ -61,8 +61,8 @@ public class PostEntity {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	
-	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-	private List<CommentEntity> comments = new ArrayList<>();
+//	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+//	private List<CommentEntity> comments = new ArrayList<>();
 
 
 }

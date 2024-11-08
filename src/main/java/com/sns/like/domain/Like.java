@@ -1,17 +1,14 @@
-package com.sns.comment.domain;
+package com.sns.like.domain;
 
 import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
-public class Comment {
-	private int id;
+@Getter
+public class Like {
 	private int postId;
 	private int userId;
-	private String content;
 	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 }

@@ -23,40 +23,40 @@
 		</div>
 		
 		<!-- 타임라인 -->
-		<article th:each="post : ${postList}">
+		<article th:each="card : ${cardList}">
 			<!-- 헤더(글쓴이) -->
 			<div class="timeline-title bg-light d-flex justify-content-between align-items-center px-3">
-				<span th:text="${post.getUser().getName()}">글쓴이??</span>
+				<span th:text="${card.getUser().getName()}">글쓴이??</span>
 				<img src="/img/more-icon.png" title="더보기" class="pointer" alt="더보기" width="50px">
 			</div>
 			
 			<!-- 사진 -->
-			<img th:src="${post.getImgPath()}" class="timeline-img" alt="타임라인 사진">
+			<img th:src="${card.getPost().getImgPath()}" class="timeline-img" alt="타임라인 사진">
 			<!-- 좋아요, 타임라인 글내용, 댓글 -->
 			<div class="p-3">
 				<!-- 좋아요 -->
 				<div class="d-flex align-items-center">
 					<img title="좋아요" class="pointer" src="/img/heart-icon.png" width="25px">
-					<span class="ml-2">좋아요 ?개</span>
+					<span class="ml-2" th:text="|좋아요 ${card.getLikes()}">좋아요 ?개</span>
 				</div>
 				<!-- 타임라인 텍스트 -->
 				<div class="d-flex mt-1 justify-content-between">
 					<!-- 글쓴이 이름 -->
-					<div class="nickname" th:text="${post.getUser().getName()}">글쓴이</div>
+					<div class="nickname" th:text="${card.getUser().getName()}">글쓴이</div>
 					
 					<!-- 텍스트 -->
-					<div th:text="${post.content}" class="text-wrap ml-2 w-75"></div>
+					<div th:text="${card.getPost().getContent()}" class="text-wrap ml-2 w-75"></div>
 				</div>
 				
 				<!-- 댓글 -->
 				<div class="comments">
 					<div class="bg-light mt-2 p-1">댓글</div>
 					
-					<th:block th:each="comment : ${post.getComments()}">
+					<th:block th:each="comment : ${card.getComments()}">
 						<div class="d-flex justify-content-between mt-2">
 								<div class="nickname text-wrap" th:text="${comment.getUser().getName()}">닉네임</div>
 								<div class="d-flex justify-content-between align-items-center w-75">
-									<div class="text-wrap" th:text="${comment.content}">댓글 내용</div>
+									<div class="text-wrap" th:text="${comment.getComment().getContent()}">댓글 내용</div>
 									<img th:if="${session.userLoginId == comment.getUser().getLoginId()}" class="pointer" title="댓글 삭제" alt="댓글 삭제" th:src="@{/img/x-icon.png}" width="10px">
 								</div>
 							
@@ -67,7 +67,7 @@
 				<!-- 댓글 입력란 -->
 				<div class="d-flex mt-2">
 					<input class="form-control">
-					<button type="submit" class="btn btn-light ml-3 inline comment-upload-btn"  th:data-post-id="${post.id}">게시</button>
+					<button type="submit" class="btn btn-light ml-3 inline comment-upload-btn"  th:data-post-id="${card.getPost().getId()}">게시</button>
 				</div>
 			
 			</div>

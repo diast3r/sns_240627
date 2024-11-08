@@ -23,7 +23,7 @@ public class PostBO {
 	private final FileManagerService fileManager;  
 	
 	
-	public List<PostEntity> getPostListOrderById() {
+	public List<PostEntity> getRecentPostList() {
 		return postRepository.findByOrderByIdDesc();
 	}
 	
@@ -40,11 +40,9 @@ public class PostBO {
 	public PostEntity addPost(int userId, String loginId, String content, MultipartFile file) {
 		String filePath = fileManager.uploadFile(file, loginId);
 		
-		UserEntity user = userRepository.findById(userId).orElseThrow();
-		
 		return postRepository.save(PostEntity
 				.builder()
-				.user(user)
+				.userId(userId)
 				.content(content)
 				.imgPath(filePath)
 				.build());

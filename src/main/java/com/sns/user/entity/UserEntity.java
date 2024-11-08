@@ -63,6 +63,6 @@ public class UserEntity {
 	 * List<주인 Entity>를, N쪽에는 @JoinColumn과 @ManyToOne를 붙인 mappedBy는 1쪽에서 하는 설정 (주인
 	 * 쪽은 다른 설정)
 	 */
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private List<PostEntity> posts = new ArrayList<>(); // 초기화하지 않으면 NullPointException 발생함.
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private List<PostEntity> posts = new ArrayList<>(); // 초기화하지 않으면 NullPointException 발생함.
 }

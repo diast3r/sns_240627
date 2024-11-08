@@ -63,4 +63,10 @@ public class UserBO {
 		}
 	}
 	
+	// input: userId
+	// output: UserEntity
+	public UserEntity getUserEntityById(int id) {
+		return userRepository.findById(id).orElse(null);
+	}
+	
 }

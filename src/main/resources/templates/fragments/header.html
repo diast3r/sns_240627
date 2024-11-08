@@ -4,7 +4,7 @@
 	<header class="bg-info d-flex justify-content-between align-items-center px-5">
 		<h2><a id="logo" href="/timeline">Marondalgram</a></h2>
 		<div th:if="${session.userName} != null">
-			<span th:text="|${session.userName}님 안녕하세요|" class="font-weight-bold"></span>
+			<span th:text="|${session.userName}님 |" class="font-weight-bold"></span>
 			<a id="logoutLink" href="/user/sign-out">로그아웃</a>
 		</div>
 		
