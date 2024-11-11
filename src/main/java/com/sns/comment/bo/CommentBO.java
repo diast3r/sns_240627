@@ -31,22 +31,54 @@ public class CommentBO {
 		return commentMapper.insertComment(postId, userId, content);
 	}
 	
+	
+	/**
+	 * Comment + UserEntity(작성자)로 CommentDTO 만들기 
+	 * @param postId
+	 * @return
+	 */
 	// input: 글 번호
 	// output: List<CommentDTO>
 	public List<CommentDTO> generateCommentListByPostId(int postId) {
 		List<CommentDTO> commentDTOList = new ArrayList<>();
+		
+		
 		List<Comment> commentList = commentMapper.selectCommentListByPostId(postId);
 		
-		CommentDTO commentDTO;
 		for (Comment comment : commentList) {
-			commentDTO = new CommentDTO();
+			CommentDTO commentDTO = new CommentDTO();
+			
+			// 댓글 1개
 			commentDTO.setComment(comment);
-			commentDTO.setUser(userBO.getUserEntityById(comment.getUserId()));
+			
+			// 댓글쓴이
+			// UserSimpleDTO로 바꾸기
+			commentDTO.setUser(userBO.getUserSimpleById(comment.getUserId()));
 			
 			commentDTOList.add(commentDTO);
 		}
 		
 		return commentDTOList;
 	};
+	
+	/**
+	 * id로 조회해서 Comment 하나 가져오기(Mybatis)
+	 * 
+	 * @param id Comment의 id
+	 * @return Comment
+	 */
+	public Comment getCommentById(int id) {
+		return commentMapper.selectCommentById(id);
+	}
+	
+	
+	/**
+	 * 댓글 삭제 (Mybatis)
+	 * @param id 삭제할 comment의 id
+	 * @return
+	 */
+	public int deleteComment(int id) {
+		return commentMapper.deleteComment(id);
+	}
 	
 }

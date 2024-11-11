@@ -1,6 +1,6 @@
 package com.sns.comment.domain;
 
-import com.sns.user.entity.UserEntity;
+import com.sns.user.domain.UserSimpleDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,7 @@ public class CommentDTO {
 	// 댓글 1개
 	private Comment comment;
 	
-	private UserEntity user;
+	// TODO UserSimpleDTO로 바꾸기
+	private UserSimpleDTO user;
 	
 }

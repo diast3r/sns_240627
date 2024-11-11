@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sns.like.mapper.LikeMapper">
-	<select id="selectLikeListByPostId" parameterType="int" resultType="com.sns.like.domain.Like">
+	<select id="selectLikeListByPostId" parameterType="map" resultType="com.sns.like.domain.Like">
 		SELECT
 			`postId`
 			,`userId`
@@ -12,4 +12,41 @@
 		WHERE
 			`postId` = #{postId}
 	</select>
+	
+	<delete id="deleteLike" parameterType="map">
+		DELETE
+		FROM
+			`like`
+		WHERE
+			`postId` = #{postId} AND
+			`userId` = #{userId}
+	</delete>
+	
+	<select id="selectLikeByPostIdAndUserId" parameterType="map" resultType="com.sns.like.domain.Like">
+		SELECT
+			`postId`
+			,`userId`
+			,`createdAt`
+		FROM
+			`like`
+		WHERE
+			`postId` = #{postId} AND
+			`userId` = #{userId}
+	</select>
+	
+	<insert id="insertLike" parameterType="map">
+		INSERT INTO `like`
+		(
+			`postId`
+			,`userId`
+			,`createdAt`
+		)
+		VALUES
+		(
+			#{postId}
+			,#{userId}
+			,NOW()
+		)
+	</insert>
+	
 </mapper>

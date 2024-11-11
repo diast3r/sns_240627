@@ -1,9 +1,9 @@
 package com.sns.user.bo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.sns.user.domain.UserSimpleDTO;
 import com.sns.user.entity.UserEntity;
 import com.sns.user.repository.UserRepository;
 
@@ -67,6 +67,19 @@ public class UserBO {
 	// output: UserEntity
 	public UserEntity getUserEntityById(int id) {
 		return userRepository.findById(id).orElse(null);
+	}
+	
+	
+	// UserEntity에서 loginId, imgPath, name만 가지고 온 DTO
+	public UserSimpleDTO getUserSimpleById(int id) {
+		UserEntity userEntity = userRepository.findById(id).orElse(null);
+		UserSimpleDTO userSimpleDTO = UserSimpleDTO.builder()
+				.loginId(userEntity.getLoginId())
+				.imgPath(userEntity.getImgPath())
+				.name(userEntity.getName())
+				.build();
+			
+		return userSimpleDTO;
 	}
 	
 }

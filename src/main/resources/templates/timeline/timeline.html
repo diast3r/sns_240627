@@ -15,7 +15,7 @@
 					<!-- file 태그를 숨겨두고 이미지를 클릭하면 파일을 클릭한 것과 같은 효과를 준다. -->
 					<input name="file" type="file" id="file" accept=".jpg, .png, .gif" class="d-none">
 					
-					<img id="fileUploadBtn" src="/img/heart-icon.png" title="사진 업로드" alt="사진 업로드" class="imgUploadBtn pointer">
+					<img id="fileUploadBtn" src="/img/img-upload.png" title="사진 업로드" alt="사진 업로드" class="imgUploadBtn pointer">
 					<div id="fileName" class="ml-2"></div>
 					<button type="submit" class="btn btn-info">게시</button>
 				</div>
@@ -26,8 +26,14 @@
 		<article th:each="card : ${cardList}">
 			<!-- 헤더(글쓴이) -->
 			<div class="timeline-title bg-light d-flex justify-content-between align-items-center px-3">
-				<span th:text="${card.getUser().getName()}">글쓴이??</span>
-				<img src="/img/more-icon.png" title="더보기" class="pointer" alt="더보기" width="50px">
+				<!-- 타임라인 프사 -->
+				<div th:with="empty='/img/empty-profile-img.png', imgPath=${card.getUser().getImgPath()}" class="d-flex align-items-center">
+					<img th:src="${imgPath != null ? imgPath : empty}" width="30px">
+					<span th:text="${card.getUser().getName()}" class="ml-3">글쓴이??</span>
+				</div>
+				
+				<!-- 더보기 modal 창 -->
+				<img src="/img/more-icon.png" title="더보기" class="pointer more-btn" alt="더보기" width="50px">
 			</div>
 			
 			<!-- 사진 -->
@@ -36,32 +42,39 @@
 			<div class="p-3">
 				<!-- 좋아요 -->
 				<div class="d-flex align-items-center">
-					<img title="좋아요" class="pointer" src="/img/heart-icon.png" width="25px">
+					<img title="좋아요" class="pointer like-toggle-btn" th:src="${card.filledLike ? '/img/heart-icon (1).png' : '/img/heart-icon.png'}" th:data-post-id="${card.getPost().getId()}" width="25px">
 					<span class="ml-2" th:text="|좋아요 ${card.getLikes()}개|">좋아요 ?개</span>
 				</div>
 				<!-- 타임라인 텍스트 -->
-				<div class="d-flex mt-1 justify-content-between">
+				<div class="mt-1">
 					<!-- 글쓴이 이름 -->
 					<div class="nickname" th:text="${card.getUser().getName()}">글쓴이</div>
 					
 					<!-- 텍스트 -->
-					<div th:text="${card.getPost().getContent()}" class="text-wrap ml-2 w-75"></div>
+					<div th:text="${card.getPost().getContent()}" class="text-wrap mt-2"></div>
 				</div>
 				
 				<!-- 댓글 -->
 				<div class="comments">
 					<div class="bg-light mt-2 p-1">댓글</div>
 					
-					<th:block th:each="comment : ${card.getComments()}">
-						<div class="d-flex justify-content-between mt-2">
-								<div class="nickname text-wrap" th:text="${comment.getUser().getName()}">닉네임</div>
-								<div class="d-flex justify-content-between align-items-center w-75">
-									<div class="text-wrap" th:text="${comment.getComment().getContent()}">댓글 내용</div>
-									<img th:if="${session.userLoginId == comment.getUser().getLoginId()}" class="pointer" title="댓글 삭제" alt="댓글 삭제" th:src="@{/img/x-icon.png}" width="10px">
-								</div>
+						<div th:each="comment : ${card.getComments()}" class="d-flex align-items-start mt-2">
+							<!-- 댓글 프사 -->
+							<div th:with="empty='/img/empty-profile-img.png', imgPath=${card.getUser().getImgPath()}">
+								<img th:src="${imgPath != null ? imgPath : empty}" width="30px">
+							</div>
 							
+							<!-- 댓글 닉네임, 내용 -->
+							<div class="ml-3 w-100">
+								<div class="nickname text-wrap" th:text="${comment.getUser().getName()}">닉네임</div>
+								<div class="d-flex justify-content-between align-items-start">
+									<div class="text-wrap" th:text="${comment.getComment().getContent()}">댓글 내용</div>
+									
+									<!-- 댓글 삭제 -->
+									<img th:if="${session.userLoginId == comment.getUser().getLoginId()}" th:data-comment-id="${comment.getComment().getId()}" class="pointer comment-delete-btn" title="댓글 삭제" alt="댓글 삭제" th:src="@{/img/x-icon.png}" width="10px">
+								</div>
+							</div>
 						</div>
-					</th:block>
 				</div>
 				
 				<!-- 댓글 입력란 -->
@@ -195,12 +208,56 @@
 				})
 				
 				
-			});
+			}); // 댓글 작성 완료
 			
 			
+			// 댓글 삭제
+			$(".comment-delete-btn").on("click", function() {
+				
+				let commentId = $(this).data("comment-id");
+				
+				$.ajax({
+					type:"DELETE"
+					,url:"/comment/delete"
+					,data:{"commentId":commentId}
+					,success:function(data) {
+						if (data.code == 200) {
+							alert(data.result);
+							location.reload();
+						} else {
+							alert(data.error_message);
+						}
+					}
+					,error:function(e) {
+						alert("실패");
+					}
+					
+				})
+				
+			}); // 댓글 삭제 종료
 			
 			
 			// 좋아요
+			$(".like-toggle-btn").on("click", function() {
+				
+				$.ajax({
+					type:"get"
+					,url:"/like/" + $(this).data("post-id")
+					,success:function(data) {
+						if (data.code == 200) {
+							location.reload(true);
+						} else {
+							alert(data.error_message);
+						}
+					}
+					,error:function(e) {
+						alert("실패");
+					}
+				})
+			}); // 좋아요 종료
+			
+			
+			
 			
 		}); // document ready 종료
     </script>

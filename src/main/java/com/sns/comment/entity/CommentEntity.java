@@ -14,6 +14,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * 이 Entity는 안 쓰일 예정임.
+ * 
+ * @deprecated Entity의 join을 연습하기 위해 만들어진 객체.
+ */
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

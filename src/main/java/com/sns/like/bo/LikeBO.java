@@ -15,7 +15,22 @@ public class LikeBO {
 	
 	private final LikeMapper likeMapper;
 	
-	public List<Like> getLikeListByPostId(int postId) {
-		return likeMapper.selectLikeListByPostId(postId);
+	public void likeToggle(int postId, int userId) {
+		Like like = getLikeByPostIdAndUserId(postId, userId);
+		if (like == null) {
+			likeMapper.insertLike(postId, userId);
+		} else {
+			likeMapper.deleteLike(postId, userId);
+		}
 	}
+	
+	public List<Like> getLikeListByPostId(int postId, int userId) {
+		return likeMapper.selectLikeListByPostId(postId, userId);
+	}
+	
+	public Like getLikeByPostIdAndUserId(int postId, int userId) {
+		return likeMapper.selectLikeByPostIdAndUserId(postId, userId);
+	}
+	
+	
 }

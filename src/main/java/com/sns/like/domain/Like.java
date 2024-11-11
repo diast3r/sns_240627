@@ -2,10 +2,10 @@ package com.sns.like.domain;
 
 import java.time.LocalDateTime;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-@Builder
+@Setter
 @Getter
 public class Like {
 	private int postId;

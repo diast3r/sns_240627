@@ -34,4 +34,26 @@
 		WHERE
 			`postId` = #{postId}
 	</select>
+	
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM
+			`comment`
+		WHERE
+			`id` = #{id}
+	</delete>
+	
+	<select id="selectCommentById" parameterType="int" resultType="com.sns.comment.domain.Comment">
+		SELECT
+			`id`
+			,`postId`
+			,`userId`
+			,`content`
+			,`createdAt`
+			,`updatedAt`
+		FROM
+			`comment`
+		WHERE
+			`id` = #{id}
+	</select>
+	
 </mapper>
