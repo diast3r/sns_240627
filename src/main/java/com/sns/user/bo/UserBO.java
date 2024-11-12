@@ -16,7 +16,7 @@ public class UserBO {
 	private final UserRepository userRepository;
 	
 	/**
-	 * <b>아이디로 사용자 조회 (JPA)</b><br><br>
+	 * <b>아이디로 사용자 조회 (JPA)</b><br>
 	 * 
 	 * @param loginId 아이디
 	 * @return 결과가 있으면 {@code UserEntity}, 없으면 {@code null}
@@ -63,6 +63,7 @@ public class UserBO {
 		}
 	}
 	
+	@Deprecated
 	// input: userId
 	// output: UserEntity
 	public UserEntity getUserEntityById(int id) {
@@ -74,6 +75,7 @@ public class UserBO {
 	public UserSimpleDTO getUserSimpleById(int id) {
 		UserEntity userEntity = userRepository.findById(id).orElse(null);
 		UserSimpleDTO userSimpleDTO = UserSimpleDTO.builder()
+				.id(userEntity.getId())
 				.loginId(userEntity.getLoginId())
 				.imgPath(userEntity.getImgPath())
 				.name(userEntity.getName())

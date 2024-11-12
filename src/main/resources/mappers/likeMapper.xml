@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sns.like.mapper.LikeMapper">
-	<select id="selectLikeListByPostId" parameterType="map" resultType="com.sns.like.domain.Like">
+
+	<!-- 좋아요 개수 조회 -->
+	<select id="selectLikeListByPostId" parameterType="int" resultType="com.sns.like.domain.Like">
 		SELECT
 			`postId`
 			,`userId`
@@ -13,7 +15,26 @@
 			`postId` = #{postId}
 	</select>
 	
-	<delete id="deleteLike" parameterType="map">
+	<!-- selectLikeListByPostId,  selectLikeByPostIdAndUserId 합치기 -->
+	<!-- <select id="selectLikeCountByPostIdOrUserId" parameterType="map" resultType="com.sns.like.domain.Like">
+		SELECT
+			`postId`
+			,`userId`
+			,`createdAt`
+		FROM
+			`like`
+		WHERE
+			`postId` = #{postId}
+			<if test="userId != null">
+			AND `userId` = #{userId}
+			</if>
+	</select> -->
+	
+	
+	
+	
+	<!-- 좋아요 해제하기 -->
+	<delete id="deleteLikeByPostIdUserId" parameterType="map">
 		DELETE
 		FROM
 			`like`
@@ -22,6 +43,8 @@
 			`userId` = #{userId}
 	</delete>
 	
+	<!-- 좋아요 조회(로그인한 사람이 누른 좋아요) -->
+	<!-- select count(1)로 1또는 0을 가져와도 되고 해당 데이터를 가져와도 됨. -->
 	<select id="selectLikeByPostIdAndUserId" parameterType="map" resultType="com.sns.like.domain.Like">
 		SELECT
 			`postId`
@@ -34,6 +57,7 @@
 			`userId` = #{userId}
 	</select>
 	
+	<!-- 좋아요 누르기 -->
 	<insert id="insertLike" parameterType="map">
 		INSERT INTO `like`
 		(

@@ -35,7 +35,7 @@ public class LikeRestController {
 		}
 		
 		// toggle 요청 => BO
-		likeBO.likeToggle(postId, userId);
+		likeBO.toggleLike(postId, userId);
 		
 		
 		// 응답값

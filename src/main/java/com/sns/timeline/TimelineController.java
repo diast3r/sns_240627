@@ -25,9 +25,6 @@ public class TimelineController {
 	public String timeline(Model model, HttpSession session) {
 		
 		Integer userId = (Integer)session.getAttribute("userId");
-		if (userId == null) {
-			userId = 0;
-		}
 		List<CardDTO> cardList = timelineBO.generateCardList(userId);
 		
 		model.addAttribute("cardList", cardList);

@@ -12,7 +12,6 @@ public class CommentDTO {
 	// 댓글 1개
 	private Comment comment;
 	
-	// TODO UserSimpleDTO로 바꾸기
 	private UserSimpleDTO user;
 	
 }

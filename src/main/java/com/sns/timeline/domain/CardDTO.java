@@ -25,8 +25,8 @@ public class CardDTO {
 	private List<CommentDTO> comments;
 	
 	// 좋아요 N개
-	private int likes;
+	private int likeCount;
 	
 	// 로그인한 사람이 누른 좋아요
-	private boolean filledLike;
+	private Like filledLike;
 }

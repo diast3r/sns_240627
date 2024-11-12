@@ -25,9 +25,9 @@ public class TimelineBO {
 	private final UserBO userBO;
 	private final LikeBO likeBO;
 	
-	// input: X
+	// input: 로그인된 사람 Id(비로그인도 가능 => null 될 것)
 	// output: List<CardDTO>
-	public List<CardDTO> generateCardList(int userId) {
+	public List<CardDTO> generateCardList(Integer userId) {
 		List<CardDTO> cardList = new ArrayList<>();
 		
 		// 글 목록
@@ -47,10 +47,14 @@ public class TimelineBO {
 			card.setComments(commentBO.generateCommentListByPostId(postEntity.getId()));
 			
 			// 좋아요 개수
-			card.setLikes(likeBO.getLikeListByPostId(postEntity.getId(), userId).size());
+			card.setLikeCount(likeBO.getLikeListByPostId(postEntity.getId()).size());
 			
-			// 로그인한 유저가 누른 좋아요
-			card.setFilledLike(likeBO.getLikeByPostIdAndUserId(postEntity.getId(), userId) != null ? true : false);
+			// 로그인한 사용자가 좋아요 눌렀는지 여부
+			// 1. 비로그인 => 빈 하트
+			// 2. 로그인 => 누른 적 없음. 빈 하트
+			// 3. 로그인 => 누른 적 있음. 채워진 하트
+			// => 이 분기는 timelineBO가 할 게 아니라 likeBO가 할 것. 역할 구분을 확실히 하자.
+			card.setFilledLike(likeBO.filledLikeByPostIdAndUserId(postEntity.getId(), userId));
 			
 			
 			

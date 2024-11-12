@@ -42,8 +42,8 @@
 			<div class="p-3">
 				<!-- 좋아요 -->
 				<div class="d-flex align-items-center">
-					<img title="좋아요" class="pointer like-toggle-btn" th:src="${card.filledLike ? '/img/heart-icon (1).png' : '/img/heart-icon.png'}" th:data-post-id="${card.getPost().getId()}" width="25px">
-					<span class="ml-2" th:text="|좋아요 ${card.getLikes()}개|">좋아요 ?개</span>
+					<img title="좋아요" class="pointer like-toggle-btn" th:src="${card.filledLike != null ? '/img/heart-icon (1).png' : '/img/heart-icon.png'}" th:data-post-id="${card.getPost().getId()}" alt="좋아요 하트" width="25px">
+					<span class="ml-2" th:text="|좋아요 ${card.getLikeCount()}개|">좋아요 ?개</span>
 				</div>
 				<!-- 타임라인 텍스트 -->
 				<div class="mt-1">
@@ -71,7 +71,7 @@
 									<div class="text-wrap" th:text="${comment.getComment().getContent()}">댓글 내용</div>
 									
 									<!-- 댓글 삭제 -->
-									<img th:if="${session.userLoginId == comment.getUser().getLoginId()}" th:data-comment-id="${comment.getComment().getId()}" class="pointer comment-delete-btn" title="댓글 삭제" alt="댓글 삭제" th:src="@{/img/x-icon.png}" width="10px">
+									<img th:if="${session.userId == comment.getUser().getId()}" th:data-comment-id="${comment.getComment().getId()}" class="pointer comment-delete-btn" title="댓글 삭제" alt="댓글 삭제" th:src="@{/img/x-icon.png}" width="10px">
 								</div>
 							</div>
 						</div>
@@ -237,11 +237,11 @@
 			}); // 댓글 삭제 종료
 			
 			
-			// 좋아요
+			// 좋아요 토글
 			$(".like-toggle-btn").on("click", function() {
 				
 				$.ajax({
-					type:"get"
+					type:"get" // 생략하면 기본적으로 get 방식임.
 					,url:"/like/" + $(this).data("post-id")
 					,success:function(data) {
 						if (data.code == 200) {
