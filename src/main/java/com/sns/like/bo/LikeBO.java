@@ -40,7 +40,7 @@ public class LikeBO {
 	}
 	
 	public Like filledLikeByPostIdAndUserId(int postId, Integer userId) {
-		Like filledLike = likeMapper.selectLikeByPostIdAndUserId(postId, userId);
+		Like filledLike = likeMapper.selectLikeByPostIdUserId(postId, userId);
 		
 		return filledLike != null ? filledLike : null;
 	}

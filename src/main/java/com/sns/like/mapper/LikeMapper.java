@@ -33,7 +33,7 @@ public interface LikeMapper {
 	 * @param userId
 	 * @return 좋아요 했으면 Like, 안 했으면 null
 	 */
-	public Like selectLikeByPostIdAndUserId(
+	public Like selectLikeByPostIdUserId(
 			@Param("postId") int postId,
 			@Param("userId") Integer userId);
 	
