@@ -4,6 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/defaultLayout}">
 <section layout:fragment="content" class="contents d-flex justify-content-center">
+
 	<div class="timeline-box">
 		<!-- 글쓰기 -->
 		<div th:if="${session.userId != null}" class="p-2">
@@ -33,7 +34,7 @@
 				</div>
 				
 				<!-- 더보기 modal 창 -->
-				<img src="/img/more-icon.png" title="더보기" class="pointer more-btn" alt="더보기" width="50px">
+				<img th:if="${session.userId == card.post.userId}" src="/img/more-icon.png" title="더보기" class="pointer more-btn" alt="더보기" width="50px" data-toggle="modal" data-target="#modal" th:data-post-id="${card.post.id}">
 			</div>
 			
 			<!-- 사진 -->
@@ -84,7 +85,34 @@
 				</div>
 			
 			</div>
+			
 		</article>
+	
+	
+		<!-- Modal: 타임리프 레이아웃 때문에 section(fragment) 태그 안쪽에 위치 -->
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+		  Launch demo modal
+		</button>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="modal">
+			<!-- modal-sm: 작은 모달창 -->
+			<!-- modal-dialog-centered: 수직 기준 가운데 위치 -->
+			<div class="modal-dialog modal-sm modal-dialog-centered">
+				<div class="modal-content text-center">
+		    		<div class="py-3">
+		    			<span id="postDelBtn" class="pointer">삭제하기</span>
+		    		</div>
+		    		<div class="py-3 border-top">
+		    			<!-- data-dismiss : 취소하는 기능 -->
+		    			<span data-dismiss="modal" class="pointer">취소</span>
+		    		</div>
+				</div>
+			</div>
+		</div>
+	
+	
+	
 	</div>
 </section>
 
@@ -255,6 +283,14 @@
 					}
 				})
 			}); // 좋아요 종료
+			
+			// 더보기 ... 클릭 => 1) 모달 뜸 2) postId를 modal창에 심기
+			$(".more-btn").on("click", function() {
+				let postId = $(this).data("post-id");
+				
+				// 1개만 존재하는 modal창을 재활용하기 위해 modal창의 data-post-id 를 심어서 쓴다.
+				$("#modal").data("post-id", postId);
+			});
 			
 			
 			
