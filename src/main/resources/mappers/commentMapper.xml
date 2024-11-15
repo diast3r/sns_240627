@@ -42,6 +42,13 @@
 			`id` = #{id}
 	</delete>
 	
+	<delete id="deleteCommentListByPostId" parameterType="int">
+		DELETE FROM
+			`comment`
+		WHERE
+			`postId` = #{postId}
+	</delete>
+	
 	<select id="selectCommentById" parameterType="int" resultType="com.sns.comment.domain.Comment">
 		SELECT
 			`id`

@@ -43,6 +43,15 @@
 			`userId` = #{userId}
 	</delete>
 	
+	<!-- 좋아요 삭제하기 -->
+	<delete id="deleteLikeListByPostId" parameterType="int">
+		DELETE
+		FROM
+			`like`
+		WHERE
+			`postId` = #{postId}
+	</delete>
+	
 	<!-- 좋아요 조회(로그인한 사람이 누른 좋아요) -->
 	<!-- select count(1)로 1또는 0을 가져와도 되고 해당 데이터를 가져와도 됨. -->
 	<select id="selectLikeByPostIdUserId" parameterType="map" resultType="com.sns.like.domain.Like">

@@ -254,7 +254,7 @@
 							location.reload();
 						} else {
 							alert(data.error_message);
-						}
+						}ㅋ
 					}
 					,error:function(e) {
 						alert("실패");
@@ -293,7 +293,29 @@
 			});
 			
 			
-			
+			// modal 안에 있는 삭제하기 클릭 => modal 안에는 삭제할 글번호가 있는 상태
+			$("#postDelBtn").on("click", function() {
+				
+				let postId = $("#modal").data("post-id");
+				
+				$.ajax({
+					type:"delete"
+					,url:"/post/delete"
+					,data:{"postId":postId}
+					,success:function(data) {
+						if (data.code == 200) {
+							alert("삭제되었습니다");
+							location.reload();
+						} else {
+							alert(data.error_message);
+						}
+					}
+					,error:function(e) {
+						alert("실패");
+					}
+				});
+				
+			});
 			
 		}); // document ready 종료
     </script>

@@ -71,7 +71,7 @@ public class FileManagerService {
 			try {
 				Files.delete(path);
 			} catch (IOException e) {
-				log.info("[파일매니저 파일삭제] imagePath:{}", imagePath);
+				log.info("[파일매니저 파일삭제 실패] imagePath:{}", imagePath);
 				return;
 			}
 			
@@ -82,7 +82,7 @@ public class FileManagerService {
 				try {
 					Files.delete(path);
 				} catch (IOException e) {
-					log.info("[파일매니저 폴더삭제] imagePath:{}", imagePath);
+					log.info("[파일매니저 폴더삭제 실패] imagePath:{}", imagePath);
 				}
 			}
 			

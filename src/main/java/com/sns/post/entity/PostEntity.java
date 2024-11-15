@@ -45,7 +45,7 @@ public class PostEntity {
 //	@ManyToOne
 //	@JoinColumn(name = "userId", referencedColumnName = "id") 
 //	private UserEntity user;
-	
+	@Column(name = "userId")
 	private int userId;
 	
 	private String content;

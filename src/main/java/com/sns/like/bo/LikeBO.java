@@ -8,7 +8,9 @@ import com.sns.like.domain.Like;
 import com.sns.like.mapper.LikeMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LikeBO {
@@ -23,9 +25,11 @@ public class LikeBO {
 		if (filledLikeByPostIdAndUserId(postId, userId) == null) {
 			// 좋아요 안 눌렀으면 누르기
 			likeMapper.insertLike(postId, userId);
+			log.info("[like 등록] postId:{} userId:{}", postId, userId);
 		} else {
 			// 좋아요 눌렀으면 없애기
 			likeMapper.deleteLikeByPostIdUserId(postId, userId);
+			log.info("[like 해제] postId:{} userId:{}", postId, userId);
 		}
 	}
 	
@@ -39,10 +43,29 @@ public class LikeBO {
 		return likeMapper.selectLikeListByPostId(postId);
 	}
 	
+	/**
+	 * 좋아요 눌렀는지 여부 확인(로그인한 사람)<br>
+	 * 
+	 * @param postId
+	 * @param userId
+	 * @return
+	 */
 	public Like filledLikeByPostIdAndUserId(int postId, Integer userId) {
 		Like filledLike = likeMapper.selectLikeByPostIdUserId(postId, userId);
 		
 		return filledLike != null ? filledLike : null;
+	}
+	
+	/**
+	 * post 삭제 시 딸려있는 like 전체 삭제<br>
+	 * 
+	 * @param postId 삭제될 게시글 id
+	 * @return
+	 */
+	public int deleteLikeListByPostId(int postId) {
+		int rowCount = likeMapper.deleteLikeListByPostId(postId);
+		log.info("[like 일괄 삭제] postId:{}", postId);
+		return rowCount;
 	}
 	
 }

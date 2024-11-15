@@ -11,7 +11,9 @@ import com.sns.comment.mapper.CommentMapper;
 import com.sns.user.bo.UserBO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommentBO {
@@ -77,8 +79,14 @@ public class CommentBO {
 	 * @param id 삭제할 comment의 id
 	 * @return
 	 */
-	public int deleteComment(int id) {
+	public int deleteCommentById(int id) {
 		return commentMapper.deleteComment(id);
 	}
-	
+
+	public int deleteCommentListByPostId(int postId) {
+		int rowCount = commentMapper.deleteCommentListByPostId(postId);
+		log.info("[comment 삭제] postId:{}", postId);
+		
+		return rowCount;
+	}
 }

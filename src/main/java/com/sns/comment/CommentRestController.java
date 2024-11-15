@@ -95,7 +95,7 @@ public class CommentRestController {
 		}
 		
 		// delete
-		int rowCount = commentBO.deleteComment(commentId);
+		int rowCount = commentBO.deleteCommentById(commentId);
 		
 		// 성공 result
 		if (rowCount > 0) {
