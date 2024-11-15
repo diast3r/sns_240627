@@ -1,6 +1,5 @@
 package com.sns.post.bo;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -68,7 +67,7 @@ public class PostBO {
 		postRepository.delete(post); // 엔티티를 넘기면 id(PK)로 삭제해줌
 		log.info("[post 삭제] postId:{}", postId);
 
-		// 파일 삭제는 롤백이 안 될 수도 있으니 맨 마지막에 하기.
+		// 파일 삭제는 롤백이 안 되니 맨 마지막에 하기.
 		fileManager.deleteFile(post.getImgPath());
 		log.info("[이미지 파일 삭제] postId:{} imgPath:{}", postId, post.getImgPath());
 	}
